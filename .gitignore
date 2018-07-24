@@ -13,3 +13,6 @@
 
 # source text folder for markov generator
 sourcetexts/
+
+# build folder
+build/
