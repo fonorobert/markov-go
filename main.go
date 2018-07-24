@@ -2,8 +2,6 @@ package main
 
 import (
 		"fmt";
-		"math/rand";
-		"time";
 		"io/ioutil";
 		"flag";
 		lib "github.com/fonorobert/markov-go/lib";
@@ -37,9 +35,6 @@ func main() {
 		return
 	}
 
-	rSource := rand.NewSource(time.Now().UnixNano())
-	r := rand.New(rSource)
-
 	var sourceText string
 
 	if b, err := ioutil.ReadFile(path); err == nil {
@@ -48,8 +43,7 @@ func main() {
 		panic(err)
 	}
 
-	grams, starts:= lib.GramifyWords(sourceText, n)
-	var start string = starts[r.Intn(len(starts))]
-	var newText string = lib.Generate(grams, start, n, length, limitType)
+	grams, starts := lib.GramifyWords(sourceText, n)
+	var newText string = lib.Generate(grams, starts, n, length, limitType)
 	fmt.Println(newText)
 }

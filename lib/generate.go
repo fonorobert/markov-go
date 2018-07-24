@@ -7,16 +7,15 @@ import (
 	"strings";
 )
 
-func Generate(ngrams map[string][]string, start string, n int, length int, limitType string) (newText string) {
+func Generate(ngrams map[string][]string, starts []string, n int, length int, limitType string) (newText string) {
+
+	// pick randomn starting gram
 
     rSource := rand.NewSource(time.Now().UnixNano())
     r := rand.New(rSource)
 
-    // punctuationMarks := []string{".", "!", "?"}
+	var curGram string = starts[r.Intn(len(starts))]
 
-
-
-    curGram := start
     var possibilities []string
     var next string
     var newTextSlice []string = strings.Fields(curGram)
