@@ -2,46 +2,43 @@ package main
 
 import (
 		"fmt";
-		"os";
-		// "strings";
 		"math/rand";
 		"time";
 		"io/ioutil";
-		"strconv";
+		"flag";
 		lib "github.com/fonorobert/markov-go/lib";
 		)
 
 func main() {
 
-	rSource := rand.NewSource(time.Now().UnixNano())
-	r := rand.New(rSource)
+	// get command line arguments
 
-	args := os.Args[1:]
-
-	if len(args)!=4 {
-		fmt.Println("Usage: markov-go SOURCE_PATH GRAM_ORDER RESULT_LENGTH LIMIT_TYPE")
-		return
-	}
-
-	var e error
 	var n int
 	var length int
+	var word bool
 
-	if n, e = strconv.Atoi(args[1]); e != nil {
-		panic(e)
+	flag.IntVar(&n, "n", 1, "gram order")
+	flag.IntVar(&length, "l", 1, "text length to generate")
+	flag.BoolVar(&word, "w", false, "generate number of words instead of sentences")
+
+	flag.Parse()
+
+	var path string = flag.Arg(0)
+	var limitType string = "sentence"
+
+	if word {
+		limitType = "word"
 	}
-	if length, e = strconv.Atoi(args[2]); e != nil {
-		panic(e)
-	}
 
-	var limitType string = args[3]
+	// check if path is present
 
-	if limitType != "sentence" && limitType != "word" {
-		fmt.Println("Limit type can only be \"sentence\" or \"word\".")
+	if path == "" {
+		fmt.Println("Usage: markov-go [OPTIONS] PATH/TO/SOURCE/TEXT")
 		return
 	}
 
-	var path string = args[0]
+	rSource := rand.NewSource(time.Now().UnixNano())
+	r := rand.New(rSource)
 
 	var sourceText string
 
